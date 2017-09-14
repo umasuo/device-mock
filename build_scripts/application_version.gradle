@@ -1,0 +1,4 @@
+jar {
+    baseName = 'device-mock'
+    version = '0.1'
+}
