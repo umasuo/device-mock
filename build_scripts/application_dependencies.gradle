@@ -3,9 +3,11 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    // yaml
-//    compile group: 'org.jyaml', name: 'jyaml', version: '1.3'
 
+    compile 'ch.qos.logback:logback:0.5'
+    compile 'org.apache.logging.log4j:log4j:2.9.0'
+
+    // yaml
     compile 'org.yaml:snakeyaml:1.17'
 
     // mqtt client
