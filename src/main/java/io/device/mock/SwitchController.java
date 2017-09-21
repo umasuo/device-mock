@@ -1,6 +1,6 @@
 package io.device.mock;
 
-import io.device.client.ConnectionFactory;
+import io.device.util.ConnectionFactory;
 import io.device.config.ConfigLoader;
 import io.device.dto.MqttConfig;
 import io.device.util.PayloadUtil;

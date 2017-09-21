@@ -1,4 +1,4 @@
-package io.device.client;
+package io.device.util;
 
 import io.device.dto.MqttConfig;
 
