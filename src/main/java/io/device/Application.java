@@ -8,7 +8,7 @@ import io.device.mock.SwitchController;
 public class Application {
 
   public static void main(String[] args) throws Exception {
-    SwitchController deviceMock = new SwitchController();
-    deviceMock.run();
+    SwitchController switchController = new SwitchController();
+    switchController.run();
   }
 }

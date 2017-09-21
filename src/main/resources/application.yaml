@@ -1,2 +1,2 @@
-device: {productTypeId: e65fb656-3342-4cec-96db-02c1ee3c3b45, unionId: 8da4cc42-7bbe-4d71-b19e-084c53b921d0}
-mqtt: {host: 120.25.129.124, port: 80, userName: 472d3b43-f638-4e31-9f2d-2e9fffe9ea48, publicKey: WoLvEUvVK}
+device: {productId: e65fb656-3342-4cec-96db-02c1ee3c3b45, unionId: 7a711e02-ca13-414e-b5c1-e53b630fbfb3}
+mqtt: {host: 120.25.129.124, port: 80, userName: , publicKey: }

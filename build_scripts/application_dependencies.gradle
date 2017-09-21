@@ -4,6 +4,9 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
 
+    // Spring
+    compile("org.springframework.boot:spring-boot-starter-web")
+
     compile 'ch.qos.logback:logback:0.5'
     compile 'org.apache.logging.log4j:log4j:2.9.0'
 

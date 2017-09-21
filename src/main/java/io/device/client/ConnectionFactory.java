@@ -1,5 +1,7 @@
 package io.device.client;
 
+import io.device.dto.MqttConfig;
+
 import org.fusesource.mqtt.client.BlockingConnection;
 import org.fusesource.mqtt.client.MQTT;
 
@@ -12,13 +14,13 @@ import java.security.MessageDigest;
  */
 public class ConnectionFactory {
 
-  public static BlockingConnection build(String host, int port, String userName, String publicKey) {
+  public static BlockingConnection build(MqttConfig mqttConfig) {
     MQTT mqtt = new MQTT();
 
     try {
-      mqtt.setHost(host, port);
-      mqtt.setUserName(userName);
-      mqtt.setPassword(getPassword(publicKey));
+      mqtt.setHost(mqttConfig.getHost(), mqttConfig.getPort());
+      mqtt.setUserName(mqttConfig.getUserName());
+      mqtt.setPassword(getPassword(mqttConfig.getPublicKey()));
 
       BlockingConnection connection = mqtt.blockingConnection();
       connection.connect();
