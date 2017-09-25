@@ -18,10 +18,7 @@ import java.util.Map;
  */
 public class ConfigLoader {
 
-  private static String pathname =
-      System.getProperty("user.dir") + "/src/main/resources/application.yaml";
-
-  public static String getProductId() {
+  public static String getProductId(String pathname) {
     String productId = "";
     try {
       File dumpFile = new File(pathname);
@@ -34,14 +31,14 @@ public class ConfigLoader {
 
       productId = (String) deviceConfig.get("productId");
     } catch (FileNotFoundException e) {
-      System.out.println("Wrong when get productId. Check the application.yaml");
+      System.out.println("Wrong when get productId. Check the switch-config.yaml");
       e.printStackTrace();
       throw new RuntimeException();
     }
     return productId;
   }
 
-  public static String getUnionId() {
+  public static String getUnionId(String pathname) {
     String unionId = "";
 
     try {
@@ -55,7 +52,7 @@ public class ConfigLoader {
 
       unionId = (String) deviceConfig.get("unionId");
     } catch (FileNotFoundException e) {
-      System.out.println("Wrong when get unionId. Check the application.yaml");
+      System.out.println("Wrong when get unionId. Check the switch-config.yaml");
       e.printStackTrace();
       throw new RuntimeException();
     }
@@ -63,11 +60,11 @@ public class ConfigLoader {
     return unionId;
   }
 
-  public static void cleanConfig() throws IOException {
-    writeDeviceConfig(null, null);
+  public static void cleanConfig(String pathname) throws IOException {
+    writeDeviceConfig(null, null, pathname);
   }
 
-  public static void writeDeviceConfig(String userName, String publicKey) throws IOException {
+  public static void writeDeviceConfig(String userName, String publicKey, String pathname) throws IOException {
     System.out.println("Enter. userName: " + userName + ", publicKey: " + publicKey);
     File dumpFile = new File(pathname);
     //初始化Yaml解析器
@@ -87,7 +84,7 @@ public class ConfigLoader {
     yaml.dump(appConfig, writer);
   }
 
-  public static MqttConfig getMqttConfig() {
+  public static MqttConfig getMqttConfig(String pathname) {
     MqttConfig mqttConfig = new MqttConfig();
 
     File dumpFile = new File(pathname);

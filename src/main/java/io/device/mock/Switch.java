@@ -1,9 +1,5 @@
 package io.device.mock;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 /**
  * Created by Davis on 17/9/19.
  */

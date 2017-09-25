@@ -1,8 +1,9 @@
-package io.device.mock;
+package io.device.controller;
 
-import io.device.util.ConnectionFactory;
 import io.device.config.ConfigLoader;
 import io.device.dto.MqttConfig;
+import io.device.mock.Switch;
+import io.device.util.ConnectionFactory;
 import io.device.util.PayloadUtil;
 import io.device.util.RestClient;
 
@@ -22,7 +23,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class SwitchController {
 
+  private final static String PATHNAME =
+      System.getProperty("user.dir") + "/src/main/resources/switch-config.yaml";
+
   public void run() throws Exception {
+
     System.out.println("Device switch start.");
 
     // 1. 获取设备ID及publicKey，如果没有，输入userId，developerId，token，激活与绑定设备
@@ -39,9 +44,10 @@ public class SwitchController {
   }
 
   private MqttConfig getMqttConfig() throws IOException {
-    MqttConfig mqttConfig = ConfigLoader.getMqttConfig();
+    MqttConfig mqttConfig = ConfigLoader.getMqttConfig(PATHNAME);
 
-    if (StringUtils.isBlank(mqttConfig.getUserName()) || StringUtils.isBlank(mqttConfig.getPublicKey())) {
+    if (StringUtils.isBlank(mqttConfig.getUserName()) ||
+        StringUtils.isBlank(mqttConfig.getPublicKey())) {
       Scanner sc = new Scanner(System.in);
       System.out.println("输入developerId:");
       String developerId = sc.nextLine();
@@ -50,9 +56,9 @@ public class SwitchController {
       System.out.println("输入token:");
       String token = sc.nextLine();
 
-      String productId = ConfigLoader.getProductId();
+      String productId = ConfigLoader.getProductId(PATHNAME);
 
-      String unionId = ConfigLoader.getUnionId();
+      String unionId = ConfigLoader.getUnionId(PATHNAME);
 
       Map<String, String> activeResult = RestClient
           .activeDevice(developerId, userId, token, productId, unionId);
@@ -62,7 +68,7 @@ public class SwitchController {
 
       System.out.println("Mqtt config: " + mqttConfig.toString());
 
-      ConfigLoader.writeDeviceConfig(mqttConfig.getUserName(), mqttConfig.getPublicKey());
+      ConfigLoader.writeDeviceConfig(mqttConfig.getUserName(), mqttConfig.getPublicKey(), PATHNAME);
     }
     return mqttConfig;
   }
@@ -117,8 +123,9 @@ public class SwitchController {
         break;
       case "unbind":
         // 解绑
-        ConfigLoader.cleanConfig();
-        System.out.println("Unbind device and clean the config.");
+        ConfigLoader.cleanConfig(PATHNAME);
+        System.out.println("Unbind device and clean the config. Program shut up right now.");
+        System.exit(1);
         break;
       case "201":
         // 开关1
