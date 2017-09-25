@@ -1,5 +1,6 @@
 package io.device;
 
+import io.device.controller.AdapterController;
 import io.device.controller.SwitchController;
 import io.device.controller.TableLampController;
 import io.device.mock.TableLamp;
@@ -15,7 +16,10 @@ public class Application {
 //    switchController.run();
 
 
-    TableLampController tableLampController = new TableLampController();
-    tableLampController.run();
+//    TableLampController tableLampController = new TableLampController();
+//    tableLampController.run();
+
+    AdapterController adapterController = new AdapterController();
+    adapterController.run();
   }
 }
