@@ -4,19 +4,13 @@ import io.device.config.ConfigLoader;
 import io.device.dto.MqttConfig;
 import io.device.mock.TableLamp;
 import io.device.mock.TableLamp.Mode;
-import io.device.util.ConnectionFactory;
+import io.device.util.MqttUtil;
 import io.device.util.PayloadUtil;
-import io.device.util.RestClient;
 
-import org.apache.commons.lang3.StringUtils;
 import org.fusesource.mqtt.client.BlockingConnection;
 import org.fusesource.mqtt.client.Message;
-import org.fusesource.mqtt.client.QoS;
-import org.fusesource.mqtt.client.Topic;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,58 +23,19 @@ public class TableLampController {
 
   public void run() throws Exception {
 
-    System.out.println("Device switch start.");
+    System.out.println("Device table lamp start.");
 
     // 1. 获取设备ID及publicKey，如果没有，输入userId，developerId，token，激活与绑定设备
-    MqttConfig mqttConfig = getMqttConfig();
+    MqttConfig mqttConfig = MqttUtil.getMqttConfig(PATHNAME);
 
     // 2. 配置mqtt client
-    BlockingConnection con = connectMqtt(mqttConfig);
+    BlockingConnection con = MqttUtil.connectMqtt(mqttConfig);
 
     // 2. 初始化设备
     TableLamp myTableLamp = initSwitch();
 
     // 3. 接收mqtt消息
     receiveMessage(myTableLamp, con);
-  }
-
-  private MqttConfig getMqttConfig() throws IOException {
-    MqttConfig mqttConfig = ConfigLoader.getMqttConfig(PATHNAME);
-
-    if (StringUtils.isBlank(mqttConfig.getUserName()) ||
-        StringUtils.isBlank(mqttConfig.getPublicKey())) {
-      Scanner sc = new Scanner(System.in);
-      System.out.println("输入developerId:");
-      String developerId = sc.nextLine();
-      System.out.println("输入userId:");
-      String userId = sc.nextLine();
-      System.out.println("输入token:");
-      String token = sc.nextLine();
-
-      String productId = ConfigLoader.getProductId(PATHNAME);
-
-      String unionId = ConfigLoader.getUnionId(PATHNAME);
-
-      Map<String, String> activeResult = RestClient
-          .activeDevice(developerId, userId, token, productId, unionId);
-
-      mqttConfig.setUserName(activeResult.get("userName"));
-      mqttConfig.setPublicKey(activeResult.get("publicKey"));
-
-      System.out.println("Mqtt config: " + mqttConfig.toString());
-
-      ConfigLoader.writeDeviceConfig(mqttConfig.getUserName(), mqttConfig.getPublicKey(), PATHNAME);
-    }
-    return mqttConfig;
-  }
-
-  private BlockingConnection connectMqtt(MqttConfig mqttConfig) throws Exception {
-    BlockingConnection con = ConnectionFactory.build(mqttConfig);
-
-    Topic[] topics = {new Topic("device/sub/" + mqttConfig.getUserName(), QoS.AT_LEAST_ONCE)};
-    con.subscribe(topics);
-    System.out.println("connected to mqtt block");
-    return con;
   }
 
   private TableLamp initSwitch() {
@@ -108,7 +63,7 @@ public class TableLampController {
 
         handleMessage(myTableLamp, id, data);
 
-        System.out.println("Switch status: " + myTableLamp.toString());
+        System.out.println("Table lamp status: " + myTableLamp.toString());
       }
     }
   }

@@ -2,7 +2,7 @@ package io.device.controller;
 
 import io.device.config.ConfigLoader;
 import io.device.dto.MqttConfig;
-import io.device.mock.Switch;
+import io.device.mock.Adapter;
 import io.device.util.MqttUtil;
 import io.device.util.PayloadUtil;
 
@@ -15,10 +15,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by rai on 2017/9/17.
  */
-public class SwitchController {
+public class AdapterController {
 
   private final static String PATHNAME =
-      System.getProperty("user.dir") + "/src/main/resources/switch-config.yaml";
+      System.getProperty("user.dir") + "/src/main/resources/adapter-config.yaml";
 
   public void run() throws Exception {
 
@@ -31,20 +31,20 @@ public class SwitchController {
     BlockingConnection con = MqttUtil.connectMqtt(mqttConfig);
 
     // 2. 初始化设备
-    Switch mySwitch = initSwitch();
+    Adapter myAdapter = initAdapter();
 
     // 3. 接收mqtt消息
-    receiveMessage(mySwitch, con);
+    receiveMessage(myAdapter, con);
   }
 
-  private Switch initSwitch() {
-    Switch mySwitch = new Switch();
-    mySwitch.setPower(true);
-    System.out.println("Switch status: " + mySwitch.toString());
-    return mySwitch;
+  private Adapter initAdapter() {
+    Adapter adapter = new Adapter();
+    adapter.setPower(true);
+    System.out.println("Adapter status: " + adapter.toString());
+    return adapter;
   }
 
-  private void receiveMessage(Switch mySwitch, BlockingConnection con) throws Exception {
+  private void receiveMessage(Adapter myAdapter, BlockingConnection con) throws Exception {
     System.out.println("Enter. receive message.");
     while (true) {
       Message message = con.receive(1, TimeUnit.SECONDS);
@@ -60,18 +60,18 @@ public class SwitchController {
         System.out.println("id: " + id);
         System.out.println("data: " + data);
 
-        handleMessage(mySwitch, id, data);
+        handleMessage(myAdapter, id, data);
 
-        System.out.println("Switch status: " + mySwitch.toString());
+        System.out.println("Adapter status: " + myAdapter.toString());
       }
     }
   }
 
-  private void handleMessage(Switch mySwitch, String id, String data) throws IOException {
+  private void handleMessage(Adapter myAdapter, String id, String data) throws IOException {
     switch (id) {
       case "1":
         // 总开关
-        mySwitch.setPower(Boolean.valueOf(data));
+        myAdapter.setPower(Boolean.valueOf(data));
         break;
       case "4":
         // 状态查询
@@ -82,21 +82,37 @@ public class SwitchController {
         System.out.println("Unbind device and clean the config. Program shut up right now.");
         System.exit(1);
         break;
-      case "201":
+      case "101":
         // 开关1
-        mySwitch.setSwitch1(Boolean.valueOf(data));
+        myAdapter.setSocket1(Boolean.valueOf(data));
         break;
-      case "202":
+      case "102":
         // 开关2
-        mySwitch.setSwitch2(Boolean.valueOf(data));
+        myAdapter.setSocket3(Boolean.valueOf(data));
         break;
-      case "203":
+      case "103":
         // 开关3
-        mySwitch.setSwitch3(Boolean.valueOf(data));
+        myAdapter.setSocket3(Boolean.valueOf(data));
         break;
-      case "204":
+      case "104":
         // 开关4
-        mySwitch.setSwitch4(Boolean.valueOf(data));
+        myAdapter.setSocket4(Boolean.valueOf(data));
+        break;
+      case "105":
+        // 开关1
+        myAdapter.setUsb1(Boolean.valueOf(data));
+        break;
+      case "106":
+        // 开关2
+        myAdapter.setUsb2(Boolean.valueOf(data));
+        break;
+      case "107":
+        // 开关3
+        myAdapter.setUsb3(Boolean.valueOf(data));
+        break;
+      case "108":
+        // 开关4
+        myAdapter.setUsb4(Boolean.valueOf(data));
         break;
       default:
         break;

@@ -1,0 +1,2 @@
+device: {productId: 1a67ca37-335d-4cf3-bb63-5376a4b78b72, unionId: 45755f35-8c9a-466a-aeae-111384425d20}
+mqtt: {host: 120.25.129.124, port: 80, userName: null, publicKey: null}
